@@ -1,3 +1,4 @@
+
 import React from 'react'
 import './Footer.css'
 import footer_logo from "../Assets/logo22.png"
@@ -6,37 +7,42 @@ import printester_icon from "../Assets/pintester_icon.png"
 import whatsapp_icon from "../Assets/whatsapp_icon.png"
 
 const Footer = () => {
-    return (
-      <div className='footer'>
-        <div className="footer-logo">
-            <img src={footer_logo} alt="" />
-            <p>RideOn</p>
+  return (
+    <div className='footer'>
+      <div className="footer-logo">
+        <img src={footer_logo} alt="RideOn Logo" />
+        <p>RideOn</p>
+      </div>
+      <ul className="footer-links">
+        <li><Link to="/company">Company</Link></li>
+        <li><Link to="/products">Products</Link></li>
+        <li><Link to="/offices">Offices</Link></li>
+        <li><Link to="/about">About</Link></li>
+        <li><Link to="/contact">Contact</Link></li>
+      </ul>
+      <div className="footer-social-icon">
+        <div className="footer-icons-container">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <img src={instagram_icon} alt="Instagram" />
+          </a>
         </div>
-        <ul className="footer-links">
-            <li>Company</li>
-            <li>Products</li>
-            <li>Offices</li>
-            <li>About</li>
-            <li>Contact</li>
-
-        </ul>
-        <div className="footer-social-icon">
-            <div className="footer-icons-container">
-                <img src={instagram_icon} alt="" />
-            </div>
-            <div className="footer-icons-container">
-                <img src={printester_icon} alt="" />
-            </div>
-            <div className="footer-icons-container">
-                <img src={whatsapp_icon} alt="" />
-            </div>
+        <div className="footer-icons-container">
+          <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer">
+            <img src={printester_icon} alt="Pinterest" />
+          </a>
         </div>
-        <div className="footer-copyright">
-            <hr />
-            <p>Copright @ 2024 - All Right Reserved</p>
+        <div className="footer-icons-container">
+          <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer">
+            <img src={whatsapp_icon} alt="WhatsApp" />
+          </a>
         </div>
       </div>
-    );
-  }
+      <div className="footer-copyright">
+        <hr />
+        <p>All Rights Reserved</p>
+      </div>
+    </div>
+  );
+};
 
-export default Footer
+export default Footer;

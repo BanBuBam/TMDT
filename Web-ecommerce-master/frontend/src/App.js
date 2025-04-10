@@ -10,6 +10,11 @@ import Footer from './Components/Footer/Footer';
 import men_banner from './Components/Assets/banner_mens.png'
 import women_banner from './Components/Assets/banner_women.jpg'
 import kid_banner from './Components/Assets/banner_kids.jpg'
+import CheckOut from './Pages/CheckOut';
+import Company from './Components/Company/Company';
+import Offices from './Components/Offices/Offices';
+import About from './Components/About/About';
+import Contact from './Components/Contact/Contact';
 
 function App() {
   return (
@@ -25,7 +30,12 @@ function App() {
           <Route path=':productId' element={<Product/>}/>
         </Route>
         <Route path='/cart' element={<Cart/>}/>
+        <Route path='/checkout' element={<CheckOut/>}/>
         <Route path='/login' element={<LoginSignup/>}/>
+        <Route path="/company" element={<Company />} />
+        <Route path="/offices" element={<Offices />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
       <Footer/>
       </BrowserRouter>
