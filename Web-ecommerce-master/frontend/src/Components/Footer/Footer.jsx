@@ -1,6 +1,7 @@
 
 import React from 'react'
 import './Footer.css'
+import { Link } from 'react-router-dom';
 import footer_logo from "../Assets/logo22.png"
 import instagram_icon from "../Assets/instagram_icon.png"
 import printester_icon from "../Assets/pintester_icon.png"
