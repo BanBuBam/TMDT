@@ -1,0 +1,134 @@
+.company-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #fefefe 0%, #f1e9e5 100%);
+  min-height: 100vh;
+}
+
+.company-container h1 {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 2.5em;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+.company-container h1::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background: #d35400;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.company-content {
+  background: rgba(255, 255, 255, 0.97);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.company-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.company-content > p {
+  font-size: 1.2em;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  text-align: center;
+  font-style: italic;
+  padding: 0 20px;
+}
+
+.company-details h2 {
+  color: #2c3e50;
+  font-size: 1.8em;
+  margin: 30px 0 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #d35400;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.company-details h2:hover {
+  color: #d35400;
+}
+
+.company-details p {
+  color: #666;
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.company-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  display: grid;
+  gap: 15px;
+}
+
+.company-details ul li {
+  padding: 12px 0 12px 40px;
+  position: relative;
+  color: #444;
+  font-size: 1.1em;
+  background: rgba(211, 84, 0, 0.05);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.company-details ul li::before {
+  content: '★';
+  position: absolute;
+  left: 15px;
+  color: #d35400;
+  font-size: 1.2em;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.company-details ul li:hover {
+  background: rgba(211, 84, 0, 0.1);
+  padding-left: 45px;
+  color: #d35400;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .company-container {
+      padding: 20px;
+  }
+
+  .company-container h1 {
+      font-size: 2em;
+  }
+
+  .company-content {
+      padding: 20px;
+  }
+
+  .company-details h2 {
+      font-size: 1.5em;
+  }
+
+  .company-content > p {
+      font-size: 1em;
+  }
+
+  .company-details ul li {
+      font-size: 1em;
+      padding: 10px 0 10px 40px;
+  }
+}

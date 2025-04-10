@@ -1,0 +1,115 @@
+.offices-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+  min-height: 100vh;
+}
+
+.offices-container h1 {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 2.5em;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+.offices-container h1::after {
+  content: '';
+  width: 100px;
+  height: 3px;
+  background: #27ae60;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.offices-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 0 20px;
+}
+
+.office-location {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.office-location::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: #27ae60;
+  transition: width 0.3s ease;
+}
+
+.office-location:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.office-location:hover::before {
+  width: 100%;
+  opacity: 0.1;
+}
+
+.office-location h2 {
+  color: #2c3e50;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #27ae60;
+}
+
+.office-location p {
+  color: #666;
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin: 15px 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .offices-container {
+      padding: 20px;
+  }
+
+  .offices-container h1 {
+      font-size: 2em;
+  }
+
+  .offices-content {
+      grid-template-columns: 1fr;
+      padding: 0;
+  }
+
+  .office-location {
+      padding: 25px;
+  }
+
+  .office-location h2 {
+      font-size: 1.5em;
+  }
+}
+
+@media (min-width: 1200px) {
+  .offices-content {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
