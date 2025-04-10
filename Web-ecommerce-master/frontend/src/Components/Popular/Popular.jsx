@@ -1,28 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import './Popular.css'
-import Item from '../Item/Item';
+import React, { useEffect, useState } from 'react';
+import './Popular.css';
+import Item from '../Item/Item.jsx';
+import data_product from '../Assets/data'; // Import dữ liệu từ file local
 
 const Popular = () => {
+  const [popularProducts, setPopularProducts] = useState([]);
 
-  const [popularProducts,setPopularProducts] = useState([]);
-  
-    useEffect(()=>{
-      fetch('http://localhost:4000/popularinwomen')
-      .then((response)=>response.json())
-      .then((data)=>setPopularProducts(data));
-    },[])
+  useEffect(() => {
+    // Gán dữ liệu local thay vì gọi API
+    setPopularProducts(data_product);
+  }, []);
 
-    return (
-      <div className='popular'>
-        <h1>POPULAR </h1>
-        <hr />
-        <div className='popular-item'>
-            {popularProducts.map((item,i)=>{
-                return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
-        })}
-        </div>
+  return (
+    <div className='popular'>
+      <h1>POPULAR</h1>
+      <hr />
+      <div className='popular-item'>
+        {popularProducts.map((item, i) => (
+          <Item
+            key={i}
+            id={item.id}
+            name={item.name}
+            image={item.image}
+            new_price={item.new_price}
+            old_price={item.old_price}
+          />
+        ))}
       </div>
-    );
-  } 
+    </div>
+  );
+};
 
-export default Popular
+export default Popular;
