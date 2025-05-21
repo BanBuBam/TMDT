@@ -1,0 +1,132 @@
+.user-profile {
+    padding: 40px;
+    min-height: 80vh;
+    background: #f5f5f5;
+}
+
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.profile-container h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+.profile-info {
+    display: grid;
+    gap: 20px;
+}
+
+.info-group {
+    display: grid;
+    gap: 5px;
+}
+
+.info-group label {
+    color: #666;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.info-group p {
+    color: #333;
+    font-size: 1.1em;
+    padding: 10px;
+    background: #f8f8f8;
+    border-radius: 5px;
+    margin: 0;
+}
+
+.info-group input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.edit-button, .update-button, .cancel-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.edit-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.update-button {
+    background-color: #2196F3;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.notification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.notification-modal {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notification-modal h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.notification-modal p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #666;
+}
+
+.notification-modal button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.notification-modal button:hover {
+    background-color: #45a049;
+}

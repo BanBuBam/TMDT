@@ -15,6 +15,7 @@ import Company from './Components/Company/Company';
 import Offices from './Components/Offices/Offices';
 import About from './Components/About/About';
 import Contact from './Components/Contact/Contact';
+import UserProfile from './Components/UserProfile/UserProfile';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/offices" element={<Offices />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
       <Footer/>
       </BrowserRouter>

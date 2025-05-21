@@ -79,7 +79,10 @@ const Product = mongoose.model("Product", {
         type:Boolean,
         default:true,
     },
-
+    detail: {
+        type: String,
+        required: false, // Thay đổi thành false
+    },
 })
 
 app.post('/addproduct',async(req,res)=>{
@@ -129,55 +132,105 @@ app.get('/allproducts',async (req,res)=>{
 })
 
 //Schema create user model
-const Users= mongoose.model('User',{
-    name:{
-        type:String,
+const Users = mongoose.model('User', {
+    name: {
+        type: String,
+        required: true
     },
-    email:{
-        type:String,
-        unique:true,
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
-    password:{
-        type:String,
+    password: {
+        type: String,
+        required: true
     },
-    cartData:{
-        type:Object,
+    phone: {
+        type: String,
+        required: true
     },
-    date:{
-        type:Date,
-        default:Date.now
+    address: {
+        type: String,
+        required: true
+    },
+    fullName: {
+        type: String,
+        required: true
+    },
+    cartData: {
+        type: Object,
+        required: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 })
 
 //Create endpoint register user
-app.post('/signup',async(req,res)=>{
-    let check = await Users.findOne({email:req.body.email});
-    if (check){
-        return res.status(400).json({success:false,error:"existing user found with same email adress"})
-    }
-    let cart = {};
-    for(let i = 0; i < 300; i++){
-        cart[i] = 0;
-    }
-    const user = new Users({
-        name:req.body.username,
-        email:req.body.email,
-        password:req.body.password,
-        cartData:cart,
-    })
+app.post('/signup', async(req, res) => {
+    try {
+        console.log("Received signup data:", req.body);
 
-    await user.save();
-
-    const data ={
-        user:{
-            id:user.id
+        // Validate all required fields
+        if (!req.body.username || !req.body.email || !req.body.password || 
+            !req.body.phone || !req.body.address || !req.body.fullName) {
+            return res.status(400).json({
+                success: false,
+                error: "All fields are required"
+            });
         }
+
+        // Check for existing user
+        const existingUser = await Users.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                error: "Email already registered"
+            });
+        }
+
+        // Initialize cart
+        const cart = {};
+        for (let i = 0; i < 300; i++) {
+            cart[i] = 0;
+        }
+
+        // Create new user with all fields
+        const newUser = new Users({
+            name: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            phone: req.body.phone,
+            address: req.body.address,
+            fullName: req.body.fullName,
+            cartData: cart
+        });
+
+        // Save user and log the result
+        const savedUser = await newUser.save();
+        console.log("Saved user:", savedUser);
+
+        const token = jwt.sign(
+            { user: { id: savedUser._id } },
+            'secret_ecom'
+        );
+
+        res.status(201).json({
+            success: true,
+            token,
+            message: "User registered successfully"
+        });
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        res.status(500).json({
+            success: false,
+            error: "Registration failed: " + error.message
+        });
     }
-
-    const token = jwt.sign(data,'secret_ecom');
-    res.json({success:true,token})
-
-})
+});
 
 //Create endpoint user login
 app.post('/login',async (req,res) =>{
@@ -434,6 +487,68 @@ if (!amount) {
   });
 
 
+
+app.get('/userinfo', async (req, res) => {
+    try {
+        const token = req.header('auth-token');
+        if (!token) {
+            return res.status(401).json({ success: false, error: "No token provided" });
+        }
+
+        const decoded = jwt.verify(token, 'secret_ecom');
+        const user = await Users.findById(decoded.user.id)
+            .select('-password -cartData -date -__v');
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: "User not found" });
+        }
+
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error('Error in /userinfo:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Server error',
+            message: error.message 
+        });
+    }
+});
+
+app.post('/updateuser', async (req, res) => {
+    try {
+        const token = req.header('auth-token');
+        if (!token) {
+            return res.status(401).json({ success: false, error: "No token provided" });
+        }
+
+        const decoded = jwt.verify(token, 'secret_ecom');
+        const updateData = {
+            name: req.body.name,
+            fullName: req.body.fullName,
+            phone: req.body.phone,
+            address: req.body.address
+        };
+
+        const user = await Users.findByIdAndUpdate(
+            decoded.user.id,
+            updateData,
+            { new: true }
+        ).select('-password -cartData -date -__v');
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: "User not found" });
+        }
+
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error('Error in /updateuser:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Update failed',
+            message: error.message 
+        });
+    }
+});
 
 app.listen(port,(error)=>{
     if(!error){

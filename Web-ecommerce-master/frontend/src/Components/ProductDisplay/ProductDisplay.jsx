@@ -45,13 +45,10 @@ const ProductDisplay = (props) => {
                 </div>
             </div>
             <button onClick={()=>{addToCart(product.id)}}>ADD TO CART</button>
-            <p className='productdisplay-right-category'><span>Category :</span> MotoBike</p>
+            <p className='productdisplay-right-category'><span>Category :</span> {product.category}</p>
             <p className='productdisplay-right-category'><span>Tags :</span> Modern, Latest</p>
             <p className='productdisplay-right-description'>
-            <span>Description :</span> Honda AirBlade là một dòng xe tay ga hiện đại với thiết kế thể thao, mạnh mẽ.  
-            Xe được trang bị động cơ eSP tiết kiệm nhiên liệu, hệ thống phanh ABS an toàn và nhiều tiện ích như 
-            khóa thông minh Smart Key, cốp rộng và đèn LED chiếu sáng. Đây là lựa chọn lý tưởng cho những ai tìm kiếm 
-            một chiếc xe tay ga phong cách và hiệu suất cao.
+            <span>Description :</span> {product.detail}
             </p>
 
         </div>
