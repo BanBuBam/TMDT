@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { ShopContext } from '../../Context/ShopContext';
 import './CheckOutPage.css'; // We'll add some CSS separately
 
 const CheckOutPage = () => {
-  const { getTotalCartAmount } = useContext(ShopContext);
+  const { cartTotal } = useContext(ShopContext);
   
   const [buyerInfo, setBuyerInfo] = useState({
     name: '',
@@ -13,6 +13,37 @@ const CheckOutPage = () => {
   });
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem('auth-token');
+        if (!token) return;
+
+        const response = await fetch('http://localhost:4000/userinfo', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'auth-token': token
+          }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setBuyerInfo(prev => ({
+            ...prev,
+            name: data.user.fullName,
+            phone: data.user.phone,
+            address: data.user.address
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   const validateForm = () => {
     const newErrors = {};
@@ -42,7 +73,7 @@ const CheckOutPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          amount: getTotalCartAmount(),
+          amount: cartTotal, // Use cartTotal instead of getTotalCartAmount
           buyer: buyerInfo,
         }),
       });
@@ -58,8 +89,6 @@ const CheckOutPage = () => {
       alert('An error occurred. Please try again later.');
     }
   };
-
-  const totalAmount = getTotalCartAmount();
 
   return (
     <div className="checkout-container">
@@ -119,14 +148,14 @@ const CheckOutPage = () => {
           <h3>Order Summary</h3>
           <div className="total-amount">
             <span>Total:</span>
-            <span>{totalAmount.toLocaleString()} VND</span>
+            <span>{cartTotal.toLocaleString()} VND</span>
           </div>
         </div>
 
         <button
           className="checkout-button"
           onClick={handleCheckout}
-          disabled={!totalAmount}
+          disabled={!cartTotal}
         >
           COMPLETE CHECKOUT
         </button>
