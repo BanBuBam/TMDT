@@ -3,7 +3,7 @@ import { ShopContext } from '../../Context/ShopContext';
 import './CheckOutPage.css'; // We'll add some CSS separately
 
 const CheckOutPage = () => {
-  const { cartTotal } = useContext(ShopContext);
+  const { cartTotal, discount } = useContext(ShopContext);
   
   const [buyerInfo, setBuyerInfo] = useState({
     name: '',
@@ -65,6 +65,10 @@ const CheckOutPage = () => {
 
   const handleCheckout = async () => {
     if (!validateForm()) return;
+    if (!cartTotal || cartTotal <= 0) {
+      alert('Please select items to checkout');
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:4000/payment', {
@@ -147,7 +151,7 @@ const CheckOutPage = () => {
         <div className="checkout-summary">
           <h3>Order Summary</h3>
           <div className="total-amount">
-            <span>Total:</span>
+            <span>Total Amount:</span>
             <span>{cartTotal.toLocaleString()} VND</span>
           </div>
         </div>

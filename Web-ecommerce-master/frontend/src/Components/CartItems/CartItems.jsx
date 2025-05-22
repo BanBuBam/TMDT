@@ -1,16 +1,26 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CartItems.css';
 import { ShopContext } from '../../Context/ShopContext';
 import remove_icon from '../Assets/cart_cross_icon.png';
 
 const CartItems = () => {
-  const { getTotalCartAmount, all_product, cartItems, removeFromCart, addToCart, removeItemCompletely } = useContext(ShopContext);
+  const { 
+    getTotalCartAmount, 
+    all_product, 
+    cartItems, 
+    removeFromCart, 
+    addToCart, 
+    removeItemCompletely,
+    setSelectedItems,
+    discount,
+    setDiscount,
+    setCartTotal
+  } = useContext(ShopContext);
   const navigate = useNavigate();
 
   const [promoCode, setPromoCode] = useState('');
-  const [discount, setDiscount] = useState(0);
-  const [selectedItems, setSelectedItems] = useState({});
+  const [selectedItems, setSelectedItemsState] = useState({});
   const [selectAll, setSelectAll] = useState(false);
 
   // Kiểm tra xem tất cả items có được chọn không
@@ -19,7 +29,7 @@ const CartItems = () => {
 
   // Hàm xử lý khi click vào checkbox từng item
   const handleCheckboxChange = (productId) => {
-    setSelectedItems(prev => {
+    setSelectedItemsState(prev => {
       const newSelected = {
         ...prev,
         [productId]: !prev[productId]
@@ -46,7 +56,7 @@ const CartItems = () => {
         }
       });
     }
-    setSelectedItems(newSelectedItems);
+    setSelectedItemsState(newSelectedItems);
   };
 
   // Add new function to calculate selected items total
@@ -66,11 +76,8 @@ const CartItems = () => {
   };
 
   const handlePromoCodeSubmit = () => {
-    if (promoCode === '12345') {
-      setDiscount(getSelectedItemsTotal() * 0.5); // Update to use selected items total
-    } else {
-      setDiscount(0);
-    }
+    const newDiscount = promoCode === '12345' ? getSelectedItemsTotal() * 0.5 : 0;
+    setDiscount(newDiscount); // Cập nhật discount trong context
   };
 
   const cartTotal = getSelectedItemsTotal() - discount; // Update to use selected items total
@@ -82,6 +89,13 @@ const CartItems = () => {
       addToCart(productId, newQuantity - cartItems[productId]); // Thêm sự khác biệt
     }
   };
+
+  // Update context whenever selected items change
+  useEffect(() => {
+    setSelectedItems(selectedItems);
+    const total = getSelectedItemsTotal() - discount;
+    setCartTotal(total);
+  }, [selectedItems, discount, setSelectedItems, setCartTotal]);
 
   return (
     <div className='cartitems'>

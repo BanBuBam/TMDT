@@ -14,6 +14,7 @@ const ShopContextProvider = (props) => {
     const [all_product, setAll_Product] = useState([]);
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [selectedItems, setSelectedItems] = useState({}); // Add selected items state
+    const [cartTotal, setCartTotal] = useState(0);
     const [discount, setDiscount] = useState(0); // Add discount state
 
     useEffect(() => {
@@ -152,13 +153,13 @@ const ShopContextProvider = (props) => {
     };
 
     const getTotalCartItem = () => {
-        let totalItem = 0;
+        let totalTypes = 0;
         for (const item in cartItems) {
             if (cartItems[item] > 0) {
-                totalItem += cartItems[item];
+                totalTypes += 1; // Đếm mỗi loại sản phẩm là 1, không quan tâm số lượng
             }
         }
-        return totalItem;
+        return totalTypes;
     };
 
     const getSelectedItemsTotal = () => {
@@ -176,15 +177,21 @@ const ShopContextProvider = (props) => {
         return totalAmount;
     };
 
+    useEffect(() => {
+        // Cập nhật cartTotal mỗi khi selectedItems hoặc discount thay đổi
+        const total = getSelectedItemsTotal() - discount;
+        setCartTotal(total);
+    }, [selectedItems, discount]);
+
     const contextValue = { 
         getTotalCartItem, 
         getTotalCartAmount,
-        getSelectedItemsTotal,
         selectedItems,
         setSelectedItems,
         discount,
         setDiscount,
-        cartTotal: getSelectedItemsTotal() - discount,
+        cartTotal,
+        setCartTotal,
         all_product, 
         cartItems, 
         addToCart, 
