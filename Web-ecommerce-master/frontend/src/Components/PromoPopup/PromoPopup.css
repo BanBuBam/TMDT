@@ -1,0 +1,81 @@
+/* PromoPopup.css */
+
+/* Overlay full-screen */
+.promo-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  
+  z-index: 9999;
+  pointer-events: none;    /* chỉ .promo-content bắt sự kiện */
+}
+
+/* Dùng flex để căn content theo từng hướng */
+.promo-modal.promo-left,
+.promo-modal.promo-right,
+.promo-modal.promo-bottom,
+.promo-modal.promo-center {
+  display: flex;
+  pointer-events: none;
+}
+
+/* Hàm reusable: box chứa popup */
+.promo-content {
+  position: relative;
+  
+  padding: 1rem;
+  border-radius: 8px;
+  
+  max-width: 300px;
+  width: 90%;
+  pointer-events: auto;
+}
+
+/* Nút đóng luôn góc trên-phải của .promo-content */
+.promo-close {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 24px; height: 24px;
+  background: #333; color: #fff;
+  border: none; border-radius: 50%;
+  font-size: 16px; line-height: 24px;
+  cursor: pointer; text-align: center;
+}
+
+/* Ảnh bên trong */
+.promo-img {
+  display: block;
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  margin-top: 0.5rem;
+}
+
+/* —— VỊ TRÍ —— */
+
+/* trái – căn giữa chiều dọc, cách trái 20px */
+.promo-left {
+  align-items: center;       /* dọc giữa */
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+
+/* phải – căn giữa chiều dọc, cách phải 20px */
+.promo-right {
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 20px;
+}
+
+/* dưới – căn giữa chiều ngang, cách dưới 20px */
+.promo-bottom {
+  justify-content: center;   /* ngang giữa */
+  align-items: flex-end;
+  padding-bottom: 20px;
+}
+
+/* giữa – căn giữa cả hai chiều */
+.promo-center {
+  justify-content: center;
+  align-items: center;
+}

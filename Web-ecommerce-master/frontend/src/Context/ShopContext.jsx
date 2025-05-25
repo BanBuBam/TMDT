@@ -13,6 +13,9 @@ const getDefaultCart = () => {
 const ShopContextProvider = (props) => {
     const [all_product, setAll_Product] = useState([]);
     const [cartItems, setCartItems] = useState(getDefaultCart());
+    const [selectedItems, setSelectedItems] = useState({}); // Add selected items state
+    const [cartTotal, setCartTotal] = useState(0);
+    const [discount, setDiscount] = useState(0); // Add discount state
 
     useEffect(() => {
         fetch('http://localhost:4000/allproducts')
@@ -150,23 +153,50 @@ const ShopContextProvider = (props) => {
     };
 
     const getTotalCartItem = () => {
-        let totalItem = 0;
+        let totalTypes = 0;
         for (const item in cartItems) {
             if (cartItems[item] > 0) {
-                totalItem += cartItems[item];
+                totalTypes += 1; // Đếm mỗi loại sản phẩm là 1, không quan tâm số lượng
             }
         }
-        return totalItem;
+        return totalTypes;
     };
+
+    const getSelectedItemsTotal = () => {
+        let totalAmount = 0;
+        if (!all_product.length) return totalAmount;
+
+        Object.keys(selectedItems).forEach(itemId => {
+            if (selectedItems[itemId] && cartItems[itemId] > 0) {
+                const item = all_product.find(product => product.id === Number(itemId));
+                if (item) {
+                    totalAmount += item.new_price * cartItems[itemId];
+                }
+            }
+        });
+        return totalAmount;
+    };
+
+    useEffect(() => {
+        // Cập nhật cartTotal mỗi khi selectedItems hoặc discount thay đổi
+        const total = getSelectedItemsTotal() - discount;
+        setCartTotal(total);
+    }, [selectedItems, discount]);
 
     const contextValue = { 
         getTotalCartItem, 
-        getTotalCartAmount, 
+        getTotalCartAmount,
+        selectedItems,
+        setSelectedItems,
+        discount,
+        setDiscount,
+        cartTotal,
+        setCartTotal,
         all_product, 
         cartItems, 
         addToCart, 
         removeFromCart,
-        removeItemCompletely // Add the new function to context
+        removeItemCompletely
     };
 
     return (

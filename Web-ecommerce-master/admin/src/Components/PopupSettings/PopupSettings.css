@@ -1,0 +1,157 @@
+/* PopupSettings.css */
+
+/* Container chính */
+.popup-settings {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Tiêu đề */
+.popup-settings h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.popup-settings h3 {
+  margin-top: 2rem;
+  font-size: 1.25rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+/* Các nhóm form */
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  flex: 0 0 120px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input[type="file"],
+.form-group select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color .2s ease;
+}
+
+.form-group input[type="file"]:focus,
+.form-group select:focus {
+  border-color: #007bff;
+}
+
+/* Preview ảnh */
+.preview-img {
+  display: block;
+  max-width: 200px;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+/* Nút lưu/cập nhật */
+.popup-settings > button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color .2s ease;
+}
+
+.popup-settings > button:hover {
+  background-color: #45a049;
+}
+
+/* Danh sách popup */
+.popup-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.popup-item {
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+  transition: transform .2s ease;
+}
+
+.popup-item:hover {
+  transform: translateY(-4px);
+}
+
+/* Ảnh trong list */
+.popup-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Thông tin effect & position */
+.popup-item > div {
+  padding: 0.8rem 1rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.popup-item > div span {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+/* Nút Sửa/Xóa */
+.popup-item button {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  margin: 0.5rem 0.25rem 1rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .2s ease, transform .1s ease;
+}
+
+.popup-item button:first-of-type {
+  background-color: #007bff;
+  color: #fff;
+}
+.popup-item button:first-of-type:hover {
+  background-color: #0056b3;
+}
+
+.popup-item button:last-of-type {
+  background-color: #E53935;
+  color: #fff;
+}
+.popup-item button:last-of-type:hover {
+  background-color: #c62828;
+}
+
+.popup-item button:hover {
+  transform: scale(1.05);
+}

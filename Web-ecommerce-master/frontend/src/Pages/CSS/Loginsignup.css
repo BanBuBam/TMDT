@@ -6,10 +6,11 @@
 }
 .loginsignup-container{
     width: 500px;
-    height: 600px;
+    min-height: 600px; /* Thay đổi height thành min-height */
     background: white;
     margin: auto;
     padding: 40px 60px;
+    position: relative;
 }
 .loginsignup-container h1{
     margin: 20px 0px;
@@ -17,7 +18,7 @@
 .loginsignup-fields{
     display: flex;
     flex-direction: column;
-    gap: 29px;
+    gap: 20px; /* Giảm gap xuống để form không quá dài */
     margin-top: 30px;
 }
 .loginsignup-fields input{
@@ -58,6 +59,25 @@
     color: #5c5c5c;
     font-size: 18px;
     font-weight: 500;
+}
+.input-group {
+    position: relative;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.error-message {
+    color: #ff4141;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+}
+
+.loginsignup-fields input.error {
+    border-color: #ff4141;
 }
 @media(max-width:1280px){
     .loginsignup{

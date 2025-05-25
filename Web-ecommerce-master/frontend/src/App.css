@@ -1,3 +1,7 @@
+body {
+  background-color: #FFFAEC; /* Thay your_color_here bằng mã màu bạn muốn */
+}
+
 .App {
   text-align: center;
 }

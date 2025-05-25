@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { ShopContext } from '../../Context/ShopContext';
 import './CheckOutPage.css'; // We'll add some CSS separately
 
 const CheckOutPage = () => {
-  const { getTotalCartAmount } = useContext(ShopContext);
+  const { cartTotal, discount } = useContext(ShopContext);
   
   const [buyerInfo, setBuyerInfo] = useState({
     name: '',
@@ -13,6 +13,37 @@ const CheckOutPage = () => {
   });
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem('auth-token');
+        if (!token) return;
+
+        const response = await fetch('http://localhost:4000/userinfo', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'auth-token': token
+          }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setBuyerInfo(prev => ({
+            ...prev,
+            name: data.user.fullName,
+            phone: data.user.phone,
+            address: data.user.address
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   const validateForm = () => {
     const newErrors = {};
@@ -34,32 +65,58 @@ const CheckOutPage = () => {
 
   const handleCheckout = async () => {
     if (!validateForm()) return;
-
-    try {
-      const response = await fetch('http://localhost:4000/payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: getTotalCartAmount(),
-          buyer: buyerInfo,
-        }),
-      });
-
-      const data = await response.json();
-      if (data.payUrl) {
-        window.location.href = data.payUrl;
-      } else {
-        alert('Payment processing failed. Please try again.');
+  
+    if (buyerInfo.paymentMethod === 'momo') {
+      try {
+        const response = await fetch('http://localhost:4000/payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: cartTotal,
+            buyer: buyerInfo,
+          }),
+        });
+  
+        const data = await response.json();
+        if (data.payUrl) {
+          window.location.href = data.payUrl;
+        } else {
+          alert('Thanh toán MoMo thất bại. Vui lòng thử lại.');
+        }
+      } catch (error) {
+        console.error('Lỗi khi thanh toán MoMo:', error);
+        alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
       }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      alert('An error occurred. Please try again later.');
+  
+    } else if (buyerInfo.paymentMethod === 'zalopay') {
+      try {
+        const response = await fetch('http://localhost:4000/zalopay/payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: cartTotal,
+            buyer: buyerInfo,
+          }),
+        });
+  
+        const data = await response.json();
+        if (data.order_url) {
+          window.location.href = data.order_url;
+        } else {
+          alert('Thanh toán ZaloPay thất bại. Vui lòng thử lại.');
+        }
+      } catch (error) {
+        console.error('Lỗi khi thanh toán ZaloPay:', error);
+        alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+      }
+  
+    } else {
+      alert(`Bạn đã chọn phương thức thanh toán: ${buyerInfo.paymentMethod}. Tạm thời chưa hỗ trợ phương thức này.`);
     }
   };
+  
 
-  const totalAmount = getTotalCartAmount();
+  // const totalAmount = getTotalCartAmount();
 
   return (
     <div className="checkout-container">
@@ -109,6 +166,7 @@ const CheckOutPage = () => {
             value={buyerInfo.paymentMethod}
             onChange={handleChange}
           >
+            <option value="zalopay">ZaloPay</option>
             <option value="momo">MoMo</option>
             <option value="cod">Cash on Delivery</option>
             <option value="bank">Bank Card</option>
@@ -119,14 +177,14 @@ const CheckOutPage = () => {
           <h3>Order Summary</h3>
           <div className="total-amount">
             <span>Total:</span>
-            <span>{totalAmount.toLocaleString()} VND</span>
+            <span>{cartTotal.toLocaleString()} VND</span>
           </div>
         </div>
 
         <button
           className="checkout-button"
           onClick={handleCheckout}
-          disabled={!totalAmount}
+          disabled={!cartTotal}
         >
           COMPLETE CHECKOUT
         </button>
@@ -134,5 +192,6 @@ const CheckOutPage = () => {
     </div>
   );
 };
+
 
 export default CheckOutPage;
