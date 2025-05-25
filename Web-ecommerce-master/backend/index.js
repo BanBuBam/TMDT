@@ -772,6 +772,55 @@ app.delete('/banner/:id', async (req, res) => {
 });
 
 
+// 3) Schema & Model
+const Popup = mongoose.model("Popup", {
+  imageUrl: { type: String, required: true },
+  effect:   { type: String, required: true },
+  position: { type: String, required: true }, // left|right|bottom|center
+  createdAt:{ type: Date,   default: Date.now }
+});
+
+// 4) Routes
+
+// GET all popups (cho admin)
+app.get("/popups", async (req, res) => {
+  const list = await Popup.find().sort({ createdAt: -1 });
+  res.json(list);
+});
+
+// GET latest popup (cho frontend hiển thị 1 cái mới nhất)
+app.get("/popup", async (req, res) => {
+  const p = await Popup.findOne().sort({ createdAt: -1 });
+  if (!p) return res.status(404).json({ message: "No popup found" });
+  res.json(p);
+});
+
+// POST thêm popup mới
+app.post("/popup", async (req, res) => {
+  const { imageUrl, effect, position } = req.body;
+  if (!imageUrl || !effect || !position) {
+    return res.status(400).json({ error: "Thiếu dữ liệu bắt buộc" });
+  }
+  const popup = new Popup({ imageUrl, effect, position });
+  await popup.save();
+  res.status(201).json(popup);
+});
+
+// PUT cập nhật popup
+app.put("/popup/:id", async (req, res) => {
+  const updated = await Popup.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.json(updated);
+});
+
+// DELETE popup
+app.delete("/popup/:id", async (req, res) => {
+  await Popup.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
+
+
+
+
 app.listen(port,(error)=>{
     if(!error){
         console.log("Server Running on Port"+port)
