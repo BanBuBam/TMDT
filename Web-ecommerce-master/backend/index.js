@@ -550,6 +550,131 @@ app.post('/updateuser', async (req, res) => {
     }
 });
 
+// Get all users
+app.get('/allusers', async (req, res) => {
+    try {
+        const users = await Users.find({}).select('-password -cartData');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Error fetching users" });
+    }
+});
+
+// Delete user
+app.delete('/deleteuser/:userId', async (req, res) => {
+    try {
+        const user = await Users.findByIdAndDelete(req.params.userId);
+        if (!user) {
+            return res.status(404).json({ success: false, error: "User not found" });
+        }
+        res.json({ success: true, message: "User deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ success: false, error: "Error deleting user" });
+    }
+});
+
+// Add new user by admin
+app.post('/admin/adduser', async (req, res) => {
+    try {
+        // Validate required fields
+        if (!req.body.username || !req.body.email || !req.body.password || 
+            !req.body.phone || !req.body.address || !req.body.fullName) {
+            return res.status(400).json({
+                success: false,
+                error: "All fields are required"
+            });
+        }
+
+        // Check existing email
+        const existingUser = await Users.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                error: "Email already exists"
+            });
+        }
+
+        // Initialize empty cart
+        const cart = {};
+        for (let i = 0; i < 300; i++) {
+            cart[i] = 0;
+        }
+
+        // Create new user
+        const newUser = new Users({
+            name: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            phone: req.body.phone,
+            address: req.body.address,
+            fullName: req.body.fullName,
+            cartData: cart
+        });
+
+        await newUser.save();
+        res.status(201).json({
+            success: true,
+            message: "User created successfully"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: "Error creating user"
+        });
+    }
+});
+
+// Update user by admin
+app.put('/admin/updateuser/:userId', async (req, res) => {
+    try {
+        // Kiểm tra dữ liệu đầu vào
+        if (!req.body.username || !req.body.email || !req.body.phone || 
+            !req.body.address || !req.body.fullName) {
+            return res.status(400).json({
+                success: false,
+                error: "Vui lòng điền đầy đủ thông tin"
+            });
+        }
+
+        // Tạo object chứa thông tin cập nhật
+        const updates = {
+            name: req.body.username,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            fullName: req.body.fullName
+        };
+
+        // Cập nhật user và trả về dữ liệu mới
+        const user = await Users.findByIdAndUpdate(
+            req.params.userId,
+            updates,
+            { new: true, runValidators: true }
+        ).select('-password -cartData');
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: "Không tìm thấy người dùng"
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Cập nhật thành công",
+            user
+        });
+
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({
+            success: false,
+            error: "Lỗi cập nhật người dùng"
+        });
+    }
+});
+
 app.listen(port,(error)=>{
     if(!error){
         console.log("Server Running on Port"+port)
