@@ -31,6 +31,10 @@ const Sidebar = () => {
                 <div className="sidebar-item">
                     <img src={list_product_icon} alt="" />
                     <p>Popup Settings</p>
+            <Link to={'/users'} style={{ textDecoration: "none" }}>
+                <div className="sidebar-item">
+                    <img src={list_product_icon} alt="" />
+                    <p>User List</p>
                 </div>
             </Link>
         </div>

@@ -11,7 +11,9 @@ const AddProduct = () => {
         image: "",
         category: "xemay",
         new_price: "",
-        old_price: ""
+        old_price: "",
+        detail: "",
+        quantity: "" // Thêm trường quantity
     })
 
     const imageHandler=(e)=>{
@@ -72,13 +74,35 @@ const AddProduct = () => {
                 </div>
             </div>
             <div className="addproduct-itemfield">
-                <p>Product Category</p>
-                <select value={productDetails.category} onChange={changeHandler} name="category" className='add-product-selector'>
-                    <option value="xemay">MotorBike</option>
-                    <option value="xedap">Bike</option>
-                    <option value="kid">Kid</option>
-
-                </select>
+                <p>Product Detail</p>
+                <textarea 
+                    value={productDetails.detail}
+                    onChange={changeHandler}
+                    name="detail"
+                    placeholder='Type product details here'
+                    rows="4"
+                    style={{width: "100%", padding: "8px", marginBottom: "15px", borderRadius: "3px", border: "1px solid #b9b9b9"}}
+                />
+            </div>
+            <div className="addproduct-price"> {/* Sử dụng lại class này vì nó đã có sẵn style 2 cột */}
+                <div className="addproduct-itemfield">
+                    <p>Product Category</p>
+                    <select value={productDetails.category} onChange={changeHandler} name="category" className='add-product-selector'>
+                        <option value="xemay">MotorBike</option>
+                        <option value="xedap">Bike</option>
+                        <option value="kid">Kid</option>
+                    </select>
+                </div>
+                <div className="addproduct-itemfield">
+                    <p>Quantity</p>
+                    <input 
+                        value={productDetails.quantity}
+                        onChange={changeHandler}
+                        type="number"
+                        name="quantity"
+                        placeholder='Enter quantity'
+                    />
+                </div>
             </div>
             <div className="addproduct-itemfield">
                 <label htmlFor="file-input">

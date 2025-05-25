@@ -7,6 +7,8 @@ import AddProduct from '../../Components/AddProduct/AddProduct'
 import ListProduct from '../../Components/ListProduct/ListProduct'
 import BannerSettings from '../../Components/BannerSettings/BannerSettings'
 import PopupSettings from '../../Components/PopupSettings/PopupSettings'
+import UserList from '../../Components/UserList/UserList'
+
 
 const Admin = () => {
   return (
@@ -17,6 +19,7 @@ const Admin = () => {
         <Route path='/listproduct' element={<ListProduct/>} />
         <Route path='banner' element={<BannerSettings/>} />
         <Route path='/popup' element={<PopupSettings/>} />
+        <Route path='/users' element={<UserList/>} />
       </Routes>
     </div>
   )
