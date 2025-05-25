@@ -21,6 +21,16 @@ const Sidebar = () => {
                     <p>Product List</p>
                 </div>
             </Link>
+            <Link to={'banner'} style={{ textDecoration: "none" }}>
+                <div className="sidebar-item">
+                    <img src={list_product_icon} alt="" />
+                    <p>Banner Settings</p>
+                </div>
+            </Link>
+            <Link to={'/popup'} style={{ textDecoration: "none" }}>
+                <div className="sidebar-item">
+                    <img src={list_product_icon} alt="" />
+                    <p>Popup Settings</p>
             <Link to={'/users'} style={{ textDecoration: "none" }}>
                 <div className="sidebar-item">
                     <img src={list_product_icon} alt="" />

@@ -65,34 +65,58 @@ const CheckOutPage = () => {
 
   const handleCheckout = async () => {
     if (!validateForm()) return;
-    if (!cartTotal || cartTotal <= 0) {
-      alert('Please select items to checkout');
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:4000/payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: cartTotal, // Use cartTotal instead of getTotalCartAmount
-          buyer: buyerInfo,
-        }),
-      });
-
-      const data = await response.json();
-      if (data.payUrl) {
-        window.location.href = data.payUrl;
-      } else {
-        alert('Payment processing failed. Please try again.');
+  
+    if (buyerInfo.paymentMethod === 'momo') {
+      try {
+        const response = await fetch('http://localhost:4000/payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: cartTotal,
+            buyer: buyerInfo,
+          }),
+        });
+  
+        const data = await response.json();
+        if (data.payUrl) {
+          window.location.href = data.payUrl;
+        } else {
+          alert('Thanh toán MoMo thất bại. Vui lòng thử lại.');
+        }
+      } catch (error) {
+        console.error('Lỗi khi thanh toán MoMo:', error);
+        alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
       }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      alert('An error occurred. Please try again later.');
+  
+    } else if (buyerInfo.paymentMethod === 'zalopay') {
+      try {
+        const response = await fetch('http://localhost:4000/zalopay/payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: cartTotal,
+            buyer: buyerInfo,
+          }),
+        });
+  
+        const data = await response.json();
+        if (data.order_url) {
+          window.location.href = data.order_url;
+        } else {
+          alert('Thanh toán ZaloPay thất bại. Vui lòng thử lại.');
+        }
+      } catch (error) {
+        console.error('Lỗi khi thanh toán ZaloPay:', error);
+        alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+      }
+  
+    } else {
+      alert(`Bạn đã chọn phương thức thanh toán: ${buyerInfo.paymentMethod}. Tạm thời chưa hỗ trợ phương thức này.`);
     }
   };
+  
+
+  // const totalAmount = getTotalCartAmount();
 
   return (
     <div className="checkout-container">
@@ -142,6 +166,7 @@ const CheckOutPage = () => {
             value={buyerInfo.paymentMethod}
             onChange={handleChange}
           >
+            <option value="zalopay">ZaloPay</option>
             <option value="momo">MoMo</option>
             <option value="cod">Cash on Delivery</option>
             <option value="bank">Bank Card</option>
@@ -151,7 +176,7 @@ const CheckOutPage = () => {
         <div className="checkout-summary">
           <h3>Order Summary</h3>
           <div className="total-amount">
-            <span>Total Amount:</span>
+            <span>Total:</span>
             <span>{cartTotal.toLocaleString()} VND</span>
           </div>
         </div>
@@ -167,5 +192,6 @@ const CheckOutPage = () => {
     </div>
   );
 };
+
 
 export default CheckOutPage;

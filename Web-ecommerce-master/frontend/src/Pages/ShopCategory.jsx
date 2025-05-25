@@ -3,6 +3,7 @@ import './CSS/ShopCategory.css'
 import { ShopContext } from '../Context/ShopContext';
 import dropdown_icon from '../Components/Assets/dropdown_icon.png'
 import Item from '../Components/Item/Item'
+import PromoPopup from '../Components/PromoPopup/PromoPopup';
 
 const ShopCategory = (props) => {
     const {all_product} = useContext(ShopContext);
@@ -16,6 +17,7 @@ const ShopCategory = (props) => {
 
     return (
       <div className='shop-category'>
+        <PromoPopup/>
         <img className='shopcategory-banner' src={props.banner} alt="" />
         <div className="shopcategory-indexSort">    
             <p>

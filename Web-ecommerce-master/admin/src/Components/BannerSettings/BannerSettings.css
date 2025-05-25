@@ -1,0 +1,126 @@
+/* Container chính */
+.banner-settings {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Tiêu đề */
+.banner-settings h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+/* Form thêm banner */
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  flex: 0 0 120px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input[type="file"],
+.form-group select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.preview-img {
+  display: block;
+  max-width: 200px;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Nút lưu */
+.btn-save {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color .2s ease;
+}
+
+.btn-save:hover {
+  background-color: #45a049;
+}
+
+/* Danh sách banner */
+.banner-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.banner-item {
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+  transition: transform .2s ease;
+}
+
+.banner-item:hover {
+  transform: translateY(-4px);
+}
+
+.banner-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.banner-info {
+  padding: 0.8rem 1rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.banner-info .type {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.banner-info .date {
+  display: block;
+  margin-top: 0.3rem;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+/* Nút xóa */
+.btn-del {
+  margin: 0.8rem auto 1rem;
+  padding: 0.4rem 1rem;
+  background-color: #E53935;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .2s ease;
+}
+
+.btn-del:hover {
+  background-color: #c62828;
+}
