@@ -501,6 +501,68 @@ if (!amount) {
   });
 
 
+app.get('/userinfo', async (req, res) => {
+    try {
+        const token = req.header('auth-token');
+        if (!token) {
+            return res.status(401).json({ success: false, error: "No token provided" });
+        }
+
+        const decoded = jwt.verify(token, 'secret_ecom');
+        const user = await Users.findById(decoded.user.id)
+            .select('-password -cartData -date -__v');
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: "User not found" });
+        }
+
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error('Error in /userinfo:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Server error',
+            message: error.message 
+        });
+    }
+});
+
+app.post('/updateuser', async (req, res) => {
+    try {
+        const token = req.header('auth-token');
+        if (!token) {
+            return res.status(401).json({ success: false, error: "No token provided" });
+        }
+
+        const decoded = jwt.verify(token, 'secret_ecom');
+        const updateData = {
+            name: req.body.name,
+            fullName: req.body.fullName,
+            phone: req.body.phone,
+            address: req.body.address
+        };
+
+        const user = await Users.findByIdAndUpdate(
+            decoded.user.id,
+            updateData,
+            { new: true }
+        ).select('-password -cartData -date -__v');
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: "User not found" });
+        }
+
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error('Error in /updateuser:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Update failed',
+            message: error.message 
+        });
+    }
+});
+
 
 
 // APP INFO, STK TEST: 4111 1111 1111 1111
@@ -947,9 +1009,25 @@ app.put('/admin/updateuser/:userId', async (req, res) => {
 });
 
 
+
 app.listen(port,(error)=>{
     if(!error){
         console.log("Server Running on Port"+port)
     }
 })
+// Route: GET /products/related/:category/:id
+app.get('/products/related/:category/:id', async (req, res) => {
+  const { category, id } = req.params;
 
+  try {
+    const relatedProducts = await Product.find({
+      category: category,
+      _id: { $ne: new mongoose.Types.ObjectId(id) }
+    }).limit(4);
+
+    res.json(relatedProducts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Lỗi server khi lấy sản phẩm liên quan' });
+  }
+});

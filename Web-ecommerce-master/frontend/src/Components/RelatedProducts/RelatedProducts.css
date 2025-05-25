@@ -1,85 +1,46 @@
-.relatedproducts{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    height: 90vh;
+.relatedproducts {
+  padding: 40px;
+  background-color: #f9f9f9;
 }
 
-.relatedproducts h1{
-    color: #171717;
-    font-size: 50px;
-    font-weight: 600;
+.relatedproducts h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.relatedproducts hr{
-    width: 200px;
-    height: 6px;
-    border-radius: 10px;
-    background: #252525;
+.relatedproducts-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
 }
 
-.relatedproducts-item{
-    margin-top: 50px;
-    display: flex;
-    gap: 30px;
+.relatedproducts-item {
+  flex: 0 0 auto;
+  width: 150px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
-@media(max-width:1280px){
-    .relatedproducts{
-        height: 70vh;
-    }
-    .relatedproducts h1{
-        font-size:  40px;
-    }
-    .relatedproducts hr{
-        width: 160px;
-        height: 4px;
-    }
-    .relatedproducts-item{
-        gap: 20px;
-        margin-top: 30px;
-    }
-}
-@media(max-width:1024px){
-    .relatedproducts{
-        height: 60vh;
-    }
-    .relatedproducts h1{
-        font-size: 30px;
-    }
-    .relatedproducts hr{
-        width: 120px;
-        height: 3px;
-    }
-    .relatedproducts-item{
-        gap: 15px;
-        margin-top: 20px;
-    }
-}
-@media(max-width:800px){
-    .relatedproducts{
-        height: 50vh;
-        gap: 6px;
-    }
-    .relatedproducts h1{
-        font-size: 20px;
-    }
-    .relatedproducts hr{
-        width: 100px;
-       
-    }
-    .relatedproducts-item{
-        gap: 5px;
-    }
-}
-@media(max-width:500px){
-    .relatedproducts{
-        height: 90vh;
 
-    }
-    .relatedproducts-item{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
+.relatedproducts-item:hover {
+  transform: translateY(-4px);
+}
+
+.relatedproducts-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.relatedproducts-item p {
+  font-size: 14px;
+  color: #555;
 }
