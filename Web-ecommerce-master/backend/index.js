@@ -1120,6 +1120,50 @@ app.put('/admin/updateuser/:userId', async (req, res) => {
 });
 
 
+// Thêm endpoint để cập nhật sản phẩm
+app.put('/updateproduct/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const updates = {
+            name: req.body.name,
+            category: req.body.category,
+            new_price: req.body.new_price,
+            old_price: req.body.old_price,
+            detail: req.body.detail
+        };
+
+        // Nếu có image mới thì cập nhật
+        if (req.body.image) {
+            updates.image = req.body.image;
+        }
+
+        const product = await Product.findOneAndUpdate(
+            { id: productId },
+            updates,
+            { new: true }
+        );
+
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found"
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Product updated successfully",
+            product
+        });
+
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({
+            success: false,
+            error: "Error updating product"
+        });
+    }
+});
 
 app.listen(port,(error)=>{
     if(!error){
