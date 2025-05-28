@@ -11,7 +11,8 @@ const UserList = () => {
         phone: '',
         address: '',
         fullName: '',
-        password: ''
+        password: '',
+        role: 'user' // Thêm trường role với giá trị mặc định
     });
 
     const fetchUsers = async () => {
@@ -44,7 +45,8 @@ const UserList = () => {
                 phone: user.phone,
                 address: user.address,
                 fullName: user.fullName,
-                password: ''
+                password: '',
+                role: user.role || 'user' // Thêm role khi chỉnh sửa
             });
         } else {
             setEditingUser(null);
@@ -54,7 +56,8 @@ const UserList = () => {
                 phone: '',
                 address: '',
                 fullName: '',
-                password: ''
+                password: '',
+                role: 'user'
             });
         }
         setShowModal(true);
@@ -204,6 +207,20 @@ const UserList = () => {
                                     required
                                 />
                             </div>
+                            {/* Thêm trường role vào form */}
+                            <div className="form-group">
+                                <label htmlFor="role">Vai trò</label>
+                                <select
+                                    id="role"
+                                    name="role"
+                                    value={formData.role}
+                                    onChange={handleInputChange}
+                                    required
+                                >
+                                    <option value="user">Người dùng</option>
+                                    <option value="admin">Quản trị viên</option>
+                                </select>
+                            </div>
                             <div className="modal-actions">
                                 <button type="submit">
                                     {editingUser ? 'Save Changes' : 'Add User'}
@@ -219,12 +236,13 @@ const UserList = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th>Username</th>
+                            <th>Tên đăng nhập</th>
                             <th>Email</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Full Name</th>
-                            <th>Actions</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Họ và tên</th>
+                            <th>Vai trò</th> {/* Cột mới */}
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -235,9 +253,10 @@ const UserList = () => {
                                 <td>{user.phone}</td>
                                 <td>{user.address}</td>
                                 <td>{user.fullName}</td>
+                                <td>{user.role || 'user'}</td> {/* Ô mới */}
                                 <td>
-                                    <button onClick={() => openModal(user)}>Edit</button>
-                                    <button onClick={() => handleDeleteUser(user._id)}>Delete</button>
+                                    <button onClick={() => openModal(user)}>Sửa</button>
+                                    <button onClick={() => handleDeleteUser(user._id)}>Xóa</button>
                                 </td>
                             </tr>
                         ))}
