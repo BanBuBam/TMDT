@@ -176,6 +176,11 @@ const Users = mongoose.model('User', {
         type: Object,
         required: true
     },
+    role: {
+        type: String,
+        default: 'user',
+        enum: ['user', 'admin']
+    },
     date: {
         type: Date,
         default: Date.now
@@ -211,7 +216,7 @@ app.post('/signup', async(req, res) => {
             cart[i] = 0;
         }
 
-        // Create new user with all fields
+        // Create new user with all fields including role
         const newUser = new Users({
             name: req.body.username,
             email: req.body.email,
@@ -219,7 +224,8 @@ app.post('/signup', async(req, res) => {
             phone: req.body.phone,
             address: req.body.address,
             fullName: req.body.fullName,
-            cartData: cart
+            cartData: cart,
+            role: 'user' // Mặc định role là user
         });
 
         // Save user and log the result
@@ -933,7 +939,7 @@ app.post('/admin/adduser', async (req, res) => {
             cart[i] = 0;
         }
 
-        // Create new user
+        // Create new user with role
         const newUser = new Users({
             name: req.body.username,
             email: req.body.email,
@@ -941,7 +947,8 @@ app.post('/admin/adduser', async (req, res) => {
             phone: req.body.phone,
             address: req.body.address,
             fullName: req.body.fullName,
-            cartData: cart
+            cartData: cart,
+            role: req.body.role || 'user' // Include role field
         });
 
         await newUser.save();
@@ -961,7 +968,6 @@ app.post('/admin/adduser', async (req, res) => {
 // Update user by admin
 app.put('/admin/updateuser/:userId', async (req, res) => {
     try {
-        // Kiểm tra dữ liệu đầu vào
         if (!req.body.username || !req.body.email || !req.body.phone || 
             !req.body.address || !req.body.fullName) {
             return res.status(400).json({
@@ -970,16 +976,15 @@ app.put('/admin/updateuser/:userId', async (req, res) => {
             });
         }
 
-        // Tạo object chứa thông tin cập nhật
         const updates = {
             name: req.body.username,
             email: req.body.email,
             phone: req.body.phone,
             address: req.body.address,
-            fullName: req.body.fullName
+            fullName: req.body.fullName,
+            role: req.body.role // Include role in updates
         };
 
-        // Cập nhật user và trả về dữ liệu mới
         const user = await Users.findByIdAndUpdate(
             req.params.userId,
             updates,
