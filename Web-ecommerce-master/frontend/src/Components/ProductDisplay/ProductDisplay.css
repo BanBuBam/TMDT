@@ -87,6 +87,45 @@
 .productdisplay-right-category span{
     font-weight: 600;
 }
+.productdisplay-right-quantity {
+    margin: 20px 0;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.quantity-selector input {
+    width: 60px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.quantity-selector input:focus {
+    outline: none;
+    border-color: #ff4141;
+}
+
+.stock-info {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Ẩn mũi tên tăng giảm mặc định của input number */
+.quantity-selector input::-webkit-outer-spin-button,
+.quantity-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-selector input[type=number] {
+    -moz-appearance: textfield;
+}
 @media(max-width:1280px){
     .productdisplay{
         margin: 0px 60px;

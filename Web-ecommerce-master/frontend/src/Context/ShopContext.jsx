@@ -64,9 +64,9 @@ const ShopContextProvider = (props) => {
                     "quantity": quantity 
                 }),
             })
-                .then((response) => response.json())
-                .then((data) => console.log("Đã thêm vào giỏ:", data))
-                .catch((error) => console.error("Lỗi khi thêm vào giỏ:", error));
+            .then((response) => response.json())
+            .then((data) => console.log("Đã thêm vào giỏ:", data))
+            .catch((error) => console.error("Lỗi khi thêm vào giỏ:", error));
         }
     };
 
