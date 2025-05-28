@@ -6,7 +6,6 @@ import remove_icon from '../Assets/cart_cross_icon.png';
 
 const CartItems = () => {
   const { 
-    getTotalCartAmount, 
     all_product, 
     cartItems, 
     removeFromCart, 
@@ -34,7 +33,6 @@ const CartItems = () => {
         ...prev,
         [productId]: !prev[productId]
       };
-      // Tự động bỏ chọn selectAll nếu có bất kỳ item nào bị bỏ chọn
       if (selectAll && !newSelected[productId]) {
         setSelectAll(false);
       }
@@ -46,10 +44,8 @@ const CartItems = () => {
   const handleSelectAll = () => {
     const newSelectAll = !selectAll;
     setSelectAll(newSelectAll);
-    
     const newSelectedItems = {};
     if (newSelectAll) {
-      // Chọn tất cả items
       Object.keys(cartItems).forEach(id => {
         if (cartItems[id] > 0) {
           newSelectedItems[id] = true;
@@ -59,11 +55,10 @@ const CartItems = () => {
     setSelectedItemsState(newSelectedItems);
   };
 
-  // Add new function to calculate selected items total
+  // Tính tổng tiền các sản phẩm đã chọn
   const getSelectedItemsTotal = () => {
     let totalAmount = 0;
     if (!all_product.length) return totalAmount;
-
     Object.keys(selectedItems).forEach(itemId => {
       if (selectedItems[itemId] && cartItems[itemId] > 0) {
         const item = all_product.find(product => product.id === Number(itemId));
@@ -77,20 +72,55 @@ const CartItems = () => {
 
   const handlePromoCodeSubmit = () => {
     const newDiscount = promoCode === '12345' ? getSelectedItemsTotal() * 0.5 : 0;
-    setDiscount(newDiscount); // Cập nhật discount trong context
+    setDiscount(newDiscount);
   };
 
-  const cartTotal = getSelectedItemsTotal() - discount; // Update to use selected items total
+  const cartTotal = getSelectedItemsTotal() - discount;
 
   const handleQuantityChange = (productId, newQuantity) => {
     if (newQuantity <= 0) {
-      removeFromCart(productId, 1); // Chỉ giảm 1, không xóa hoàn toàn
+      removeFromCart(productId, 1);
     } else {
-      addToCart(productId, newQuantity - cartItems[productId]); // Thêm sự khác biệt
+      addToCart(productId, newQuantity - cartItems[productId]);
     }
   };
 
-  // Update context whenever selected items change
+  // Hàm tạo đơn hàng và chuyển sang trang checkout
+  const handleProceedToCheckout = async () => {
+    // Lấy danh sách sản phẩm đã chọn
+    const items = Object.keys(selectedItems)
+      .filter(id => selectedItems[id] && cartItems[id] > 0)
+      .map(id => ({
+        productId: Number(id),
+        quantity: cartItems[id]
+      }));
+    
+
+    if (items.length === 0) return alert('Please select items to checkout!');
+    const total = getSelectedItemsTotal() - discount;
+    const token = localStorage.getItem('auth-token');
+
+    // Gửi API tạo đơn hàng
+    const res = await fetch('http://localhost:4000/orders/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'auth-token': token
+      },
+      body: JSON.stringify({ items, total })
+    });
+    const data = await res.json();
+    console.log('API response:', data);
+
+    if (data.success && data.order && data.order._id) {
+      // Chuyển sang trang checkout với orderId vừa tạo
+      navigate(`/checkout?orderId=${data.order._id}`);
+    } else {
+      alert('Failed to create order');
+    }
+  };
+
+  // Đồng bộ selectedItems với context (nếu cần dùng ở nơi khác)
   useEffect(() => {
     setSelectedItems(selectedItems);
     const total = getSelectedItemsTotal() - discount;
@@ -146,7 +176,7 @@ const CartItems = () => {
                 <img
                   className='cartitems-remove-icon'
                   src={remove_icon}
-                  onClick={() => removeItemCompletely(e.id)} // Sử dụng hàm xóa hoàn toàn
+                  onClick={() => removeItemCompletely(e.id)}
                   alt='Remove item'
                 />
               </div>
@@ -175,8 +205,8 @@ const CartItems = () => {
             </div>
           </div>
           <button 
-            onClick={() => navigate('/checkout')}
-            disabled={getSelectedItemsTotal() === 0} // Disable if no items selected
+            onClick={handleProceedToCheckout}
+            disabled={getSelectedItemsTotal() === 0}
           >
             PROCEED TO CHECKOUT
           </button>

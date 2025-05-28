@@ -39,6 +39,12 @@ const Sidebar = () => {
                     <p>User List</p>
                 </div>
             </Link>
+            <Link to={'/orders/all'} style={{ textDecoration: "none" }}>
+               <div className="sidebar-item">
+                    <img src={list_product_icon} alt="" />
+                    <p>Admin Orders</p>
+                </div>
+            </Link>
         </div>
     )
 }

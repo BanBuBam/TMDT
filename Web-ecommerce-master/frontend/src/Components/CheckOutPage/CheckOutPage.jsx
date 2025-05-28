@@ -1,10 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { ShopContext } from '../../Context/ShopContext';
-import './CheckOutPage.css'; // We'll add some CSS separately
+import { useLocation } from 'react-router-dom';
+import './CheckOutPage.css';
 
 const CheckOutPage = () => {
   const { cartTotal, discount } = useContext(ShopContext);
-  
+
   const [buyerInfo, setBuyerInfo] = useState({
     name: '',
     phone: '',
@@ -13,6 +14,11 @@ const CheckOutPage = () => {
   });
 
   const [errors, setErrors] = useState({});
+
+  // Lấy orderId từ query string
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const orderId = queryParams.get('orderId');
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -60,12 +66,29 @@ const CheckOutPage = () => {
 
   const handleChange = (e) => {
     setBuyerInfo({ ...buyerInfo, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: '' }); // Clear error when user types
+    setErrors({ ...errors, [e.target.name]: '' });
   };
 
   const handleCheckout = async () => {
     if (!validateForm()) return;
-  
+
+    // Sau khi thanh toán thành công, cập nhật trạng thái đơn hàng
+    const updateOrderStatus = async () => {
+      if (!orderId) {
+        alert('Không tìm thấy đơn hàng để cập nhật trạng thái!');
+        return;
+      }
+      const token = localStorage.getItem('auth-token');
+      await fetch('http://localhost:4000/orders/paid', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': token
+        },
+        body: JSON.stringify({ orderId })
+      });
+    };
+
     if (buyerInfo.paymentMethod === 'momo') {
       try {
         const response = await fetch('http://localhost:4000/payment', {
@@ -76,9 +99,10 @@ const CheckOutPage = () => {
             buyer: buyerInfo,
           }),
         });
-  
+
         const data = await response.json();
         if (data.payUrl) {
+          await updateOrderStatus();
           window.location.href = data.payUrl;
         } else {
           alert('Thanh toán MoMo thất bại. Vui lòng thử lại.');
@@ -87,7 +111,7 @@ const CheckOutPage = () => {
         console.error('Lỗi khi thanh toán MoMo:', error);
         alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
       }
-  
+
     } else if (buyerInfo.paymentMethod === 'zalopay') {
       try {
         const response = await fetch('http://localhost:4000/zalopay/payment', {
@@ -98,9 +122,10 @@ const CheckOutPage = () => {
             buyer: buyerInfo,
           }),
         });
-  
+
         const data = await response.json();
         if (data.order_url) {
+          await updateOrderStatus();
           window.location.href = data.order_url;
         } else {
           alert('Thanh toán ZaloPay thất bại. Vui lòng thử lại.');
@@ -109,14 +134,13 @@ const CheckOutPage = () => {
         console.error('Lỗi khi thanh toán ZaloPay:', error);
         alert('Đã xảy ra lỗi. Vui lòng thử lại sau.');
       }
-  
+
     } else {
-      alert(`Bạn đã chọn phương thức thanh toán: ${buyerInfo.paymentMethod}. Tạm thời chưa hỗ trợ phương thức này.`);
+      // Nếu là COD hoặc Bank Card, chỉ cập nhật trạng thái đơn hàng
+      await updateOrderStatus();
+      alert(`Bạn đã chọn phương thức thanh toán: ${buyerInfo.paymentMethod}. Đơn hàng sẽ được xử lý.`);
     }
   };
-  
-
-  // const totalAmount = getTotalCartAmount();
 
   return (
     <div className="checkout-container">
@@ -192,6 +216,5 @@ const CheckOutPage = () => {
     </div>
   );
 };
-
 
 export default CheckOutPage;

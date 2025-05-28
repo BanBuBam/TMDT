@@ -16,7 +16,7 @@ import Offices from './Components/Offices/Offices';
 import About from './Components/About/About';
 import Contact from './Components/Contact/Contact';
 import UserProfile from './Components/UserProfile/UserProfile';
-
+import OrderInfo from './Components/OrderInfo/OrderInfo';
 function App() {
   return (
     <div>
@@ -38,6 +38,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/orders" element={<OrderInfo />} />
       </Routes>
       <Footer/>
       </BrowserRouter>

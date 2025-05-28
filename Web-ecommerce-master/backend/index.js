@@ -99,6 +99,23 @@ const Product = mongoose.model("Product", {
     },
 })
 
+
+const OrderSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  items: [
+    {
+      productId: Number,
+      quantity: Number,
+    }
+  ],
+  total: Number,
+  status: { type: String, enum: ['pending', 'shipping', 'completed', 'canceled'], default: 'pending' },
+  shippingStatus: { type: String, enum: ['waiting', 'shipped'], default: 'waiting' }, // For shipping tab
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Order = mongoose.model('Order', OrderSchema);
+
 app.post('/addproduct',async(req,res)=>{
     let products = await Product.find({});
     let id;
@@ -792,6 +809,95 @@ app.post('/zalopay/check-status-order', async (req, res) => {
 
 
 
+// Tạo đơn hàng khi ấn Proceed to Checkout (pending)
+app.post('/orders/create', fetchUser, async (req, res) => {
+  try {
+    const { items, total } = req.body;
+    const order = new Order({
+      userId: req.user.id,
+      items,
+      total,
+      status: 'pending'
+    });
+    await order.save();
+    res.json({ success: true, order });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Lấy tất cả đơn hàng của user
+app.get('/orders', fetchUser, async (req, res) => {
+  try {
+    const allOrders = await Order.find({ userId: req.user.id }).sort({ createdAt: -1 });
+    const pendingOrders = allOrders.filter(o => o.status === 'pending');
+    const shippingOrders = allOrders.filter(o => o.status === 'shipping' || o.status === 'completed');
+    res.json({
+      success: true,
+      allOrders,
+      pendingOrders,
+      shippingOrders
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Hủy đơn hàng
+app.post('/orders/cancel', fetchUser, async (req, res) => {
+  try {
+    const { orderId } = req.body;
+    const order = await Order.findOne({ _id: orderId, userId: req.user.id });
+    if (!order) return res.json({ success: false, error: 'Order not found' });
+    if (order.status === 'shipping' && order.shippingStatus === 'shipped') {
+      return res.json({ success: false, error: 'Cannot cancel shipped order' });
+    }
+    order.status = 'canceled';
+    await order.save();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Khi thanh toán thành công (CheckOutPage), cập nhật trạng thái đơn hàng sang shipping
+app.post('/orders/paid', fetchUser, async (req, res) => {
+  try {
+    const { orderId } = req.body;
+    const order = await Order.findOne({ _id: orderId, userId: req.user.id });
+    if (!order) return res.json({ success: false, error: 'Order not found' });
+    order.status = 'shipping';
+    order.shippingStatus = 'waiting';
+    await order.save();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Admin xác nhận đã chuyển hàng
+app.post('/orders/ship', async (req, res) => {
+  try {
+    const { orderId } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) return res.json({ success: false, error: 'Order not found' });
+    order.shippingStatus = 'shipped';
+    order.status = 'completed';
+    await order.save();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.get('/orders/all', async (req, res) => {
+  try {
+    const orders = await Order.find(); // Lấy tất cả đơn hàng
+    res.json({ success: true, orders });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 // thêm field `type` vào schema
 const Banner = mongoose.model('Banner', {
   imageUrl: { type: String, required: true },

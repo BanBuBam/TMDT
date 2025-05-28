@@ -1,0 +1,142 @@
+.order-info {
+  max-width: 900px;
+  margin: 40px auto 60px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.order-info h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 32px;
+  color: #1976d2;
+  letter-spacing: 1px;
+}
+
+.order-section {
+  margin-bottom: 32px;
+}
+
+.order-section h3 {
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 18px;
+  border-bottom: 1.5px solid #e0e0e0;
+  padding-bottom: 6px;
+}
+
+.order-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  transition: box-shadow 0.2s;
+}
+
+.order-card:hover {
+  box-shadow: 0 6px 24px rgba(25, 118, 210, 0.10);
+}
+
+.order-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 10px 16px;
+  min-width: 220px;
+  flex: 1 1 220px;
+}
+
+.order-item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 16px;
+  border: 1px solid #e0e0e0;
+}
+
+.order-item-details p {
+  margin: 2px 0;
+  font-size: 0.98rem;
+  color: #333;
+}
+
+.order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.order-footer p {
+  margin: 0;
+  font-weight: 500;
+  color: #1976d2;
+}
+
+.order-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.order-actions button,
+.order-footer button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.order-actions button:hover,
+.order-footer button:hover {
+  background: #125ea7;
+}
+.order-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  gap: 24px;
+}
+.order-tab {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #7c3aed;
+  padding: 10px 24px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.order-tab.active {
+  background: #ffe6f0;
+  color: #d72660;
+  font-weight: bold;
+  border-bottom: 2px solid #d72660;
+}
+@media (max-width: 700px) {
+  .order-info {
+    padding: 12px 2vw;
+  }
+  .order-items {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

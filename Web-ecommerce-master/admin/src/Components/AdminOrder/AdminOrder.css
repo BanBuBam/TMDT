@@ -1,0 +1,67 @@
+.admin-orders-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.admin-orders-title {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #6c3483;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.admin-orders-loading {
+  text-align: center;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.admin-orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #faf9fa;
+}
+
+.admin-orders-table th,
+.admin-orders-table td {
+  border: 1px solid #e5e5e5;
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.admin-orders-table th {
+  background: #f3e6fa;
+  color: #6c3483;
+  font-weight: 600;
+}
+
+.admin-orders-empty {
+  text-align: center;
+  color: #b2b2b2;
+  font-size: 1.1rem;
+}
+
+.admin-orders-ship-btn {
+  background: #6c3483;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.admin-orders-ship-btn:hover {
+  background: #512e5f;
+}
+
+.admin-orders-no-action {
+  color: #b2b2b2;
+}

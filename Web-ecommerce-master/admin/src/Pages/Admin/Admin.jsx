@@ -8,7 +8,7 @@ import ListProduct from '../../Components/ListProduct/ListProduct'
 import BannerSettings from '../../Components/BannerSettings/BannerSettings'
 import PopupSettings from '../../Components/PopupSettings/PopupSettings'
 import UserList from '../../Components/UserList/UserList'
-
+import AdminOrder from '../../Components/AdminOrder/AdminOrder'
 
 const Admin = () => {
   return (
@@ -20,6 +20,7 @@ const Admin = () => {
         <Route path='banner' element={<BannerSettings/>} />
         <Route path='/popup' element={<PopupSettings/>} />
         <Route path='/users' element={<UserList/>} />
+        <Route path='/orders/all' element={<AdminOrder/>} />
       </Routes>
     </div>
   )
