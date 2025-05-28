@@ -68,7 +68,7 @@ const AdminOrder = () => {
             {orders.map(order => (
               <tr key={order._id}>
                 <td>{order._id}</td>
-                <td>{order.userId}</td>
+                <td>{order.userId?.name || 'Unknown User'}</td>  {/* Thay đổi ở đây */}
                 <td>{order.total}Đ</td>
                 <td>{order.status}</td>
                 <td>{order.shippingStatus || 'N/A'}</td>

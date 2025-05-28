@@ -714,7 +714,7 @@ app.post('/zalopay/check-status-order', async (req, res) => {
 
   let postData = {
     app_id: zalopayconfig.app_id,
-    app_trans_id, // Input your app_trans_id
+    app_trans_id: app_trans_id, // Input your app_trans_id
   };
 
   let data = postData.app_id + '|' + postData.app_trans_id + '|' + zalopayconfig.key1; // appid|app_trans_id|key1
@@ -898,7 +898,9 @@ app.post('/orders/ship', async (req, res) => {
 
 app.get('/orders/all', async (req, res) => {
   try {
-    const orders = await Order.find(); // Lấy tất cả đơn hàng
+    const orders = await Order.find()
+      .populate('userId', 'name email') // Populate để lấy thông tin user
+      .sort({ createdAt: -1 });
     res.json({ success: true, orders });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
