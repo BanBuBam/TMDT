@@ -11,7 +11,7 @@
 .sidebar-item{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Thêm căn lề trái */
     margin: 0px 20px;
     padding: 5px 10px;
     border-radius: #f6f6f6;
@@ -29,5 +29,6 @@
     }
     .sidebar-item{
         margin: 0;
+        justify-content: flex-start; /* Giữ căn lề trái kể cả ở chế độ mobile */
     }
 }

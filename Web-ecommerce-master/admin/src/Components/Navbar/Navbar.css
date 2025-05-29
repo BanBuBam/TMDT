@@ -9,11 +9,24 @@
 }
 
 .nav-logo {
-    width: 200px;
+    width: 60px; /* Điều chỉnh width theo ý muốn */
+    height: auto; /* Giữ tỷ lệ khung hình */
 }
 
 .nav-profile {
     width: 75px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
 }
 
 @media(max-width:800px) {
